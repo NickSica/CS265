@@ -1,0 +1,234 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" content="no-expire">
+  <meta name="Author" content="Jeremy R. Johnson">
+	<meta name="Publisher" content="Drexel University">
+	<meta name="Copyright" content="">
+	<meta name="Keywords" content="Programming Techniques Unix">
+	<meta name="Description"
+		content="Lab for CS265 - Adv. Programming Techniques">
+	<meta name="Pagetype" content="Lab">
+	<meta name="Audience" content="All">
+	<link rel='shortcut icon' type='image/gif'
+		href='../../../images/drexel.gif'></link>
+	<script language="JavaScript" src="../../courseInfo.js"></script>
+	<script language="JavaScript" src="../../Scripts/courseFormat.js"></script>
+  <title> CS 265 &mdash; Assignment &ndash; XML Dir </title>
+</head>
+
+
+<body text="#330099" link="#000066" vlink="#000066" alink="#FF0000"
+	background="http://www.cs.drexel.edu/~kschmidt/images/blueTexture.jpeg">
+            
+<h1> Assignment &mdash; XML Dir </h1>
+            
+<h3> CS 265 Advanced Programming Techniques</h3>
+
+<h2> Introduction </h2>
+
+<p> Redo the previous assignment in Python (with some extra specs). </p>
+
+<p> You are now familiar with the problem domain.  You can gain practise doing file processing in Python. </p>
+
+<p> Your task is to recurse through a subtree of the filesystem and put a file called <tt><b>dir.xml</b></tt> in each
+directory.  You will pull data from 2 sources:  the directory itself, and a file that <i>may</i> appear in each
+directory called <tt><b>README</b></tt> . </p>
+
+<p> We've expanded the filetypes you need to worry about.  See below. </p>
+
+<h2> Sample Directory </h2>
+<p> See
+<tt>tux:/home/kschmidt/public_html/CS265/Assignments/Python-Dir2XML/Test_Dir</tt>
+.
+Here is what the directory looks like: </p>
+
+<div><samp>
+<pre>Test_Dir:
+   index.html
+	 myPipe
+	 mySocket
+   Files/
+   Labs/
+      README
+      labs.html
+      1/
+         README
+         file1.1
+         file1.2
+         file1.3
+         index.html
+         other4
+         other5
+      2/
+         Data/
+            README
+            a
+            b
+            c
+         README
+         file2.1
+         file2.2
+         index.html
+         other1
+         other4
+         other5
+      3/
+         README
+         file3.1
+         file3.2
+         file3.3
+         file3.4
+         index.html
+         other4
+   Lectures/
+      README
+      lecs.html</pre>
+</samp></div>
+
+<p> Copy over <tt>createTestDirs</tt> from the assignment directory, run it.  It will provide a consistent directory
+subtree, as above, with randomly placed named sockets (<tt>aSocket</tt>) and names pipes (<tt>aPipe</tt>).
+
+<h3> <tt>README</tt> </h3>
+<p> The <tt><b>README</b></tt> file may have 2 entries, each on its own line.  Fields are separated by colons.  Neither
+	entry is required: </p>
+<ul>
+	<li> index &ndash; lists a single file, the top-level HTML page for this directory. </li>
+	<li> required &ndash; a colon-separated list of files that should be in this directory
+	</li>
+</ul>
+
+<hr>
+
+<h2> To Do </h2>
+<p> You will write a script (or, scripts) that will take an optional argument, the directory to process.  If not
+	argument is supplied, use the current directory. </p>
+
+<p> In each subdirectory (including the top-level directory on which the script was called) you will place a file called
+	<tt><b>dir.xml</b></tt> .  If it already exists, simply overwrite it. Do <strong>not</strong> include it as one of the
+	files listed. </p>
+
+<p> The root element will be <tt>direntry</tt>.  It may contain up to 3 child nodes:  <tt>index</tt>, <tt>required</tt>,
+	and <tt>other</tt>.  <tt>index</tt> will only contain a file.  The remaining two might contain text elements: </p>
+
+<table style='margin-left:3cm; padding:10px; border-spacing:10px;'>
+	<tr>
+		<td> <tt>&lt;file&gt;</tt> </td>
+		<td> Regular file (or, symlink) </td>
+	</tr>
+	<tr>
+		<td> <tt>&lt;dir&gt;</tt> </td>
+		<td> Directory </td>
+	</tr>
+	<tr>
+		<td> <tt>&lt;fifo&gt;</tt> </td>
+		<td> A named pipe </td>
+	</tr>
+	<tr>
+		<td> <tt>&lt;sock&gt;</tt> </td>
+		<td> A socket </td>
+	</tr>
+</table>
+
+<p> Index and required data will be harvested from <tt>README</tt>.  Other files will be found by taking a listing of
+	the directory, looking for files or directories that weren't listed in README.  </p>
+
+<p> For example, the following file would be placed in <tt>CS265/Labs/2</tt> : </p>
+
+<h3> <tt>dir.xml</tt> </h3>
+
+<!-- <object class='code' type='text/html' data='dir.xml.html'> -->
+<iframe src='dir.xml.html' frameborder='1' width='400' height='300'>
+	<p> Your browser does not support the &lt;object&gt; tag. </p>
+</iframe>
+
+<!-- <p> You are <strong>not permitted</strong> to use any provided XML classes. </p> -->
+
+<hr/>
+
+<h2> Thoughts </h2>
+
+<p> It is preferrable to hand in a working program that addresses part of the problem than a mess that attempts the
+entire problem. </p>
+
+<ul>
+	<li> Use small functions </li>
+	<li> Implement 1 task at a time
+		<ul>
+			<li> Test it, separately.  Should be easy to do with functions </li>
+			<li> When working, gather your small functions together to complete the larger task </li>
+		</ul>
+	</li>
+	<li> No function should be very long </li>
+	<li> Keep your code neat, legible, logical </li>
+	<li> Overall appeal of your source code will be part of the grade.  Style matters
+		<ul>
+			<li> <strong>Appropriate</strong> comments, including the file header(s) </li>
+		</ul>
+	</li>
+</ul>
+
+<p> You might want to consider <tt>os.walk</tt>, for flipping through directories.  See <a target='_blank'
+href='os_walk.py'><tt>os_walk.py</tt></a> .  Some other useful functions, maybe:  <tt>os.path.join</tt>
+<tt>os.path.abspath</tt> <tt>os.stat</tt> .  See <a target='_blank'
+href='stat.py'><tt>stat.py</tt></a>
+
+<p> Folks, please don't spend a lot of time writing me 18 different classes.  My solution contains no user-defined
+classes, though there is 1 fairly obvious candidate, if you have that itch. </p>
+
+<hr>
+
+<h2> Submission </h2>
+
+<!-- KSS 4/2014
+<p> Along w/your source code you will submit a makefile that contains (at
+least) the following targets: </p>
+
+<ul>
+	<li> <tt><b>view</b></tt> &mdash; Display your source code in a pager
+	(like <tt><b>less</b></tt>).  At a minimum, your top-level Bash script,
+	and your AWK script.
+
+	<p> Note:  It is okay if your AWK script is embedded in your Bash script.
+	</p>
+	</li>
+
+	<li> <tt><b>run</b></tt> &mdash; to run your top-level script.  As an
+	argument you will use the environment variable <tt><b>IN_DIR</b></tt>.
+	This will look something like this:
+
+	<div><code>
+<pre>run : myscript helper1 helper2
+	 ./myscript "$$IN_DIR"</pre></code></div>
+
+	<p> You will <strong>not</strong> define this variable in the makefile,
+	nor in any of your scripts.  It can be run like this: </p>
+
+	<div><code>IN_DIR="~/CS265/foo/blah' make run</code></div>
+
+	<p> I'd recommend that you create a <tt><b>test</b></tt> target for
+	development/debugging.  You can have whatever other targets you want. </p>
+	</li>
+</ul>
+
+-->
+
+<p> Do <strong>not</strong> submit temporary files, nor your test data.
+Just the required scripts, and any helper files. </p>
+
+<h3> What to hand in </h3>
+
+<ul>
+	<li> <tt><b>dropXml.py</b></tt> &mdash; your Python3 script </li>
+	<li> Any other files needed </li>
+	<!--
+	<li> <tt><b>Makefile</b></tt> &mdash; your makefile </li>
+	-->
+	<li> <tt><b>README</b></tt> (<i>optional</i>) &mdash; anything you want to
+		tell us before we grade. </li>
+</ul>
+
+</body>
+</html>

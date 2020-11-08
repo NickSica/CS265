@@ -1,0 +1,194 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" content="no-expire">
+	<meta name="Author" content="Vera Zaychik & Kurt Schmidt">
+	<meta name="Publisher" content="Drexel University">
+	<meta name="Copyright" content="">
+	<meta name="Keywords" content="awk unix pipe filter script">
+	<meta name="Description"
+		content="Lab for CS265 - Adv. Programming Techniques">
+	<meta name="Pagetype" content="Lab">
+	<meta name="Audience" content="All">
+	<link rel='shortcut icon' type='image/gif'
+		href='../../images/drexel.gif'></link>
+	<script language="JavaScript" src="../courseInfo.js"></script>
+	<script language="JavaScript" src="../Scripts/courseFormat.js"></script>
+	<title>Lab -- Starting on Unix - finding Anagrams</title>
+</head>
+
+<body text="#330099" link="#000066" vlink="#000066" alink="#FF0000"
+	background="../../../images/blueTexture.jpeg">
+
+<h1>Lab - Finding Anagrams</h1>
+
+<p> In this writeup it is shown how the UNIX philosophy of combining simple
+programs using pipes can solve an interesting problem.  The problem is to
+find all anagrams in a file containing words.  The UNIX tools that will be
+used are:  (1) a small C program that uses library calls to do string
+operations and sorting, (2) the UNIX <tt>sort</tt> command, (3) a small AWK
+program (maybe 2), and finally the UNIX <tt>head</tt> or <tt>tail</tt>
+command. </p>
+
+<p>  The directory for this lab is
+<code>tux:/home/kschmidt/public_html/CS265/Labs/Anagram</code>  </p>
+
+<p>  Your job is to write a single script to pull all of this together.
+Most of the machinery mentioned above is given to you, in this directory, or
+right here in the sheet.  </p>
+
+<h2>Problem Statement and Solution</h2>
+
+<p> Two words are anagrams if one can be obtained from the other by permuting
+the letters.  For example, the words stop and pots are anagrams since the
+letters "s", "t", "o", and "p" in stop can be rearranged to obtain the word
+pots. </p>
+
+<p> A naive way to test if two words are anagrams is to produce all permutations
+of the letters of one of the words and compare each possible permuted
+sequence of letters to the other word.  If any sequence is equal to the other
+word then they are anagrams.  For example, to determine if "ant" and "tan"
+are anagrams, we first generate the six possible permutations of the letters
+in ant: </p>
+
+<blockquote><pre>ant
+atn
+nat
+nta
+tan
+tna</pre></blockquote>
+
+<p> and compare each to tan.  Since the 5th permuted sequence is equal to tan,
+ant and tan are anagrams. </p>
+
+<p> The problem with this approach is that as the number of letters increases,
+the number of permuted sequences gets very big.  For example, there are
+3,628,800 permutations of a 10 letter word. </p>
+
+<p> A better approach to test if two words are anagrams is to sort the letters
+in each word and then compare the sorted words.  If the words are anagrams
+then they must have the same letters and if they have the same letters
+then they are anagrams.  Therefore this test determines if two words are
+anagrams with one comparison.  For example, if we sort the letters in 
+stop and pots, we obtain the letter sequence opts for both words, which shows
+that they are anagrams. </p>
+
+<p> Given a file containing a list words we want to find all of the anagrams.
+We will do this by dividing the words into anagram classes.  An anagram
+class containing a particular word is the collection of words in the
+input list that are anagrams of the given word.  Note that if two words
+are anagrams to a given word then they are anagrams to each other.  Thus
+any two words in an anagram class are anagrams.  Moreover, all of the
+words in the input file that are anagrams to any of the words in the anagram
+class are contained in the anagram class. </p>
+
+<p> A naive way to find all of the anagram classes is for each word to
+search through all of the other words and check each to see if it
+is an anagram.  This approach is very time consuming.  A better approach
+would be to: </p>
+
+<ol>
+<li>For each word in the file sort the letters to produce a key.</li>
+<li>Sort all of the words in the input file by their key.</li>
+<li>In the sorted list find all adjacent words with the same key (these
+	are the anagram classes).</li>
+</ol>
+
+<p> This will be implemented in UNIX in the following steps: </p>
+
+<li>Use a C program called <tt><b>sign</b></tt> to read the input file (the
+dictionary on our machines, /usr/share/dict/words) and to produce an output
+file where each line contains the key (the letters of the word sorted)
+followed by the word.  This program will read from standard input and write
+to standard output so that we do not have to specify the input file in the
+program and we can use the output in a pipe.  The name of the the executable
+program will be <tt><b>sign</b></tt> .  To create this: </li>
+
+<blockquote><tt>gcc -osign sign.c</tt></blockquote>
+
+<li>The temporary file containing words and keys produced in (1) will be
+sorted using the UNIX <tt>sort</tt> command.</li>
+
+<li>Use an AWK program to collect all adjacent words with the same key.
+The result will be a file containing an anagram class per line.  The
+file containing the awk program is <a
+	href='./squash.awk'><tt>squash.awk</tt></a> .</li>
+
+<p> Here is the UNIX command to do this.  The file /usr/share/dict/words
+contains a list of just under 100,000 words.  To verify this use the command
+<tt>wc</tt>. </p>
+
+<blockquote><tt>
+	% ./sign &lt; /usr/share/dict/words | sort | awk -f squash.awk &gt; out
+</tt></blockquote>
+
+<p> The output will be in the file <tt>out</tt>.  The awk command can be put
+into a file called <tt>squash</tt>.  Such a file containing UNIX commands is
+called a shell script and is itself interpred as a command as soon as the
+execute permission has been set.  The resulting UNIX pipe, which uses the
+shell script squash instead of the call to awk, becomes </p>
+
+<blockquote><tt>
+	% ./sign &lt; /usr/share/dict/words | sort | ./squash &gt; out
+</tt></blockquote>
+
+<p> To find the largest anagram classes, we can first count the number of words 
+in each class (I'm thinkin' another AWK script here) and then sort the file
+by these counts.  Here is a UNIX command to do this: </p>
+
+<blockquote><tt>
+	% awk '{ print NF " " $0}' &lt; out | sort -n | tail
+</tt></blockquote>
+
+<p> In this command the AWK program is given between the single quotes.  The
+utility <code>tail</code> prints the last 10 lines of a file.  Here is some
+sample output (from an old dictionary): </p>
+
+<blockquote><pre><tt>
+4 glare lager large regal
+4 lament mantel mantle mental
+4 lascar rascal sacral scalar
+4 leap pale peal plea
+4 leapt petal plate pleat
+4 least slate stale steal
+4 mate meat tame team
+4 pare pear rape reap
+4 resin rinse risen siren
+5 caret carte cater crate trace
+</tt></pre></blockquote>
+
+
+<p> Students should try these commands to see if they can produce the same
+output.  Note that you can view the output of any intermediate stage
+by piping the results through <tt>more</tt>.  For example: </p>
+
+<blockquote><tt>
+	%  sign &lt; /usr/share/dict/words | more
+</tt></blockquote>
+
+<p> You can quit more by typing "q" ("man more" for more info on more). </p>
+
+<h2> Submission </h2>
+
+<p> Submit all the files needed for this lab (and <u>only</u> those
+needed). </p>
+
+<p> Your top-level script will put this all together; it'll check for the
+needed files, compile the C program (and anything else you need to have
+done), and put it all together, to print (to the screen) the 10 largest
+anagram classes. </p>
+
+<ul>
+	<li> <tt><b>anagram</b></tt> - Your top-level Bash script, the one we run
+		to get the output.</li>
+	<li> Any other files required, directly or indirectly, by your script
+		(except for the dictionary itself). </li>
+	<li> <tt><b>README</b></tt> <i>(optional)</i> - anything you want to tell
+		us before we grade. </li>
+</ul>
+
+</body>
+
+</html>

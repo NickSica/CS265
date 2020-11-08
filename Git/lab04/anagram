@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ ! -f "sign" ]] ; then
+	gcc -osign sign.c
+fi
+
+./sign < /usr/share/dict/words | sort | ./squash > out
+./getLongest < out | sort -n | tail

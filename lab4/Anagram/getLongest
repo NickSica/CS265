@@ -1,0 +1,3 @@
+#!/usr/bin/awk -f
+
+{ print NF " " $0}

@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+from album import Album
+
+dbLoc = os.environ.get("CDDB")
+database = {}
+
+def listAlbums():
+    artistNum = 0
+    artists = []
+    for artist in sorted(database):
+        artists.append(artist)
+
+	 # Artist menu
+    while(not(artistNum == "q")):
+        count = 1
+        print("\nArtists:")
+        for artist in artists:
+            print(str(count)+") "+str(artist))
+            count = count + 1
+
+        artistNum = input("Choose an artist number(q to exit): ")
+        if(artistNum.isnumeric() and int(artistNum) <= len(artists) and int(artistNum) >= 0):
+            albumNum = 0
+            albums = sorted(database[artists[int(artistNum)-1]], key=lambda album: album.date)
+				
+				# Album menu 
+            while(not(albumNum == "a")):    
+                count = 1
+                print("\nAlbums:")
+                for album in albums:
+                    print(str(count)+") "+str(album.name).strip())
+                    count = count + 1
+            
+                albumNum = input("Choose an album number(a to return to artist menu): ")
+                if(albumNum.isnumeric() and int(albumNum) <= len(albums) and int(albumNum) >= 0):
+                    # List songs in track order
+                    count = 1
+                    album = albums[int(albumNum)-1]
+                    print("\nSongs:")
+                    for song in album.tracklist:
+                        print(str(count)+") "+str(song))
+                        count = count + 1
+                    input("Press enter to return to previous menu")
+                elif(not(albumNum == "a")):
+                    print("That isn't a valid choice")
+        elif(not(artistNum == "q")):
+            print("That isn't a valid choice")
+
+def deleteAlbum():
+    artistNum = 0
+    artists = []
+    for artist in sorted(database):
+        artists.append(artist)
+
+    # Artist menu
+    while(not(artistNum == "q")):
+        count = 1
+        print("\nArtists:")
+        for artist in artists:
+            print(str(count)+") "+str(artist))
+            count = count + 1
+
+        artistNum = input("Choose an artist number(q to exit): ")
+        if(artistNum.isnumeric() and int(artistNum) <= len(artists) and int(artistNum) >= 0):
+            albumNum = 0 
+            artist = artists[int(artistNum)-1]
+            albums = sorted(database[artist], key=lambda album: album.date)            
+      
+				# Album menu
+            while(not(albumNum == "a")):    
+                count = 1
+                print("\nAlbums:")
+                for album in albums:
+                    print(str(count)+") "+str(album.name).strip())
+                    count = count + 1
+            
+                albumNum = input("Choose an album number(a to return to artist menu): ")
+                if(albumNum.isnumeric() and int(albumNum) <= len(albums) and int(albumNum) >= 0):
+                    # Delete Album
+                    confirm = ""
+
+                    while(not (confirm == "y" or confirm == "n")):
+                        confirm = input("\nAre you sure?(y/n) ")
+                        if(confirm == "n"):
+                            print("Returning to album menu")
+                        elif(confirm == "y"):
+                            database[artist].remove(albums[int(albumNum)-1])
+                            del albums[int(albumNum)-1]
+                            if(albums == []):
+                                del database[artist]
+                                artists.remove(artist)
+                                writeDb()
+                                print("This artist has no albums left, returning to artist menu")
+                                albumNum = "a"
+                            else:
+                                writeDb()
+                                print("Returning to album menu")
+                        else:
+                            print("That isn't a valid choice. I don't think you want to be messing around with input to a delete button.")
+                elif(not(albumNum == "a")):
+                    print("That isn't a valid choice")
+        elif(not(artistNum == "q")):
+            print("That isn't a valid choice")
+
+def addAlbum():
+    artist = input("Enter artist: ")
+    name = input("Enter album name: ")
+    exists = 0
+    if(artist.strip() in database):
+        for dbAlbum in database[artist]:
+            if(name.strip() == dbAlbum.name.strip()):
+                exists = 1
+            if(exists):
+                print("This album exists already")
+                return
+
+    date = "" 
+    while(not date.isnumeric()):
+        date = input("Enter release date: ")
+        if(not date.isnumeric()):
+             print("Invalid date\n")
+    song = input("Enter first song followed by a newline(type d when you are done): ")
+    if(not(str(song).strip() == "")):
+        tracklist = [song.strip()]
+    
+    while(not(song == "d")):
+        song = input("Enter next song followed by a newline(type d when you are done): ")
+        if(str(song).strip() == ""):
+            print("That is an empty song name\n")
+        else:
+            tracklist.append(song.strip())
+
+    album = Album(name=name.strip(), date=str(date).strip(), tracklist=tracklist)
+    if(artist in database):
+        database[artist.strip()].append(album)
+    else:
+        database[artist.strip()] = [album]
+
+    writeDb()
+
+def readDb():
+    with open(dbLoc, 'r') as db:
+        section = 0
+        count = 0
+        artists = []
+        albumNames = []
+        dates = []
+        tracklists = []        
+        for line in db:
+            # Build database using a state machine approach
+            if(section == 0):
+                artists.append(line.strip())
+                section = 1
+            elif(section == 1):
+                line = line.split(" ", 1)
+                dates.append(line[0])
+                albumNames.append(line[1])
+                section = 2
+            else:
+                if(line.strip() == ""):
+                    section = 0
+                    count = count + 1
+                else:
+                    if(len(tracklists) <= count):
+                        tracklists.append([line[1:].strip()])
+                    else:
+                        tracklists[count].append(line[1:].strip())
+        
+        for i in range(0, len(artists)):
+            album = Album(name=albumNames[i], date=dates[i], tracklist=tracklists[i])
+            if(artists[i] in database):
+                database[artists[i]].append(album)
+            else:
+                database[artists[i]] = [album]
+
+# Writes to dbLoc.tmp then moves it after it is done
+def writeDb():
+    with open(dbLoc+".tmp", 'w') as db:
+        for key, value in database.items():
+            for album in value:            
+                db.write(key.strip()+"\n")
+                db.write(album.date.strip()+" "+album.name.strip()+"\n")
+                for track in album.tracklist:
+                    db.write("-"+track.strip()+"\n")
+                db.write("\n")
+        os.rename(dbLoc+".tmp", dbLoc)
+
+
+def main():
+    readDb()
+    argParser = argparse.ArgumentParser()
+    argGroup = argParser.add_mutually_exclusive_group()    
+
+    argGroup.add_argument("-l", dest="albumFunc", action="store_const", const=listAlbums, help="List albums in the database")
+    argGroup.add_argument("-d", dest="albumFunc", action="store_const", const=deleteAlbum, help="Delete an album from the database")
+    argGroup.add_argument("-a", dest="albumFunc", action="store_const", const=addAlbum, help="Add an album to the database")
+   
+    args = argParser.parse_args()
+    try:
+        args.albumFunc()
+    except TypeError:
+        print("No argument specified.")
+
+if __name__ == "__main__":
+    main()

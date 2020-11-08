@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo ${1:?"No parameters, please specify two file extensions."}
+echo ${2:?"Missing second parameter."}
+
+for file in "$(ls -1 *$1)" ; do
+	mv "$file" "${file%$1}$2"
+done
+
+

@@ -1,0 +1,20 @@
+Q1.1)
+i) Someone should be able to use your interface without needing to know what is going on under the hood.
+ii) Use the least amount of primitives needed and don't add to the interface if you don't need to.
+iii) Don't do anything that would surprise the user, make your implementation predictable.
+iv) Don't change the way something is done from one function to the next.
+
+Q1.2)
+There are several unhandled types of strings, like strings with a comma in quotes and escaped quotes.
+
+Q1.3)
+Most of the problems from the previous implementation were handled properly, except empty strings.
+
+Q1.4)
+Empty strings still aren't handled properly. You can't parse more than one file, because the files are currently read through stdin through redirection.
+
+Q1.5)
+No, the empty fields not being parsed correctly is still prevalent.
+
+Q1.6)
+Yes

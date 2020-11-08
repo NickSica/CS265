@@ -1,0 +1,61 @@
+Q2)
+total 43
+-rw-r--r-- 1 njs82 njs82  8060 Apr  4 14:32 funny
+-rwxr-xr-x 1 njs82 njs82   240 Apr  4 14:32 hello.bash
+-rw-rw-r-- 1 njs82 njs82   263 Apr  4 14:33 lab1
+-rw-rw-r-- 1 njs82 njs82   515 Apr  4 14:16 TEST
+-rw-rw-r-- 1 njs82 njs82 33763 Apr  4 14:24 vi_lab
+
+Q3)
+I gave myself read and write on some_file, while I gave all others only read.
+
+Q4)
+I gave myself all permissions on some_file, while I gave all others read and execute.
+
+Q5)
+yes
+
+Q6)
+yes
+
+Q7) 
+no
+
+Q8)
+chmod 744 hello.bash (or any variant that involves the read bit being set such as 7xx, 5xx, 3xx, or 1xx)
+chmod u+x hello.bash
+
+Q9)
+I could not write to the file.
+
+Q10)
+annoy
+annoy.cc
+index.html
+itemList
+itemList-2cols
+TelecomTruths
+UnitTestingPhase
+url
+
+CS265:
+Git
+
+
+annoy
+annoy.cc
+
+
+index.html
+itemList
+itemList-2cols
+TelecomTruths
+
+
+annoy
+
+
+ls: cannot access 'annoy?': No such file or directory
+
+Q11)
+Two files were created named "a" and "space".

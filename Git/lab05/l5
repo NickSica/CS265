@@ -1,0 +1,66 @@
+1.1)
+The names of the variables are either too short and don't tell you much or unnecessary. Not only are the define statements unneeded, but they define the numbers as opposites of what they are which isn't needed if the code is changed around a bit. Setting a variable not-eof is also unneeded.
+
+1.2)
+int smaller(char *s, char *t)
+{
+   return (strcmp(s, t) < 1);
+}
+
+1.3)
+The names make no sense and even if they seemed like English they wouldn't hint at what they do.
+
+1.4)
+if(c != 'y' && c !='Y')
+	return;
+
+if(length > BUFSIZE)
+	length = BUFSIZE;
+
+flag = !flag;
+
+quote = (*line == '"');
+
+return (val & 1);
+
+1.5)
+You don't know in which order the code is going to execute, you could be reading into ch when you want to read into val and vice versa.
+
+1.6)
+1 2
+2 1
+
+1.7)
+if(!isatty(stdin) && !isatty(stdout) && !isatty(stderr))
+	return 0;
+
+return retval;
+
+for(k = 0; k < 5; k++)
+{
+	scanf("%lf", &dx);
+	k += dx;
+}
+k++;
+
+1.8)
+for(int i = 0; i < total; i++)
+{
+	if(this.getName(i) == nametable.userName())
+	{
+		return true;
+	}
+}
+
+1.9)
+There should be parentheses around the entire macro definition and c to avoid bugs and the use of the ?: operator is unneeded. It also is evaluating c more than once so it can break in some instances.
+
+1.10)
+If they aren't being used as array bounds, I'd rewrite them as constants. Another choices is declaring an enum with those values.
+
+1.11)
+The function is void, so it isn't returning anything contradictory to the comment.
+
+The function tests for odd numbers or if it is greater than MAX, not for even numbers like the comment says.
+
+Most of the comments are restatements of what you can already see clearly in the code. It doesn't help to remove confusion, it is wasted space.

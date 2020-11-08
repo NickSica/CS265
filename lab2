@@ -1,0 +1,92 @@
+Q1)	
+./tmp/gotMe.bash
+./Git/lab02/check.bash
+./Git/lab02/hello
+./Git/lab02/lab02
+./Git/lab02/loop_subshell.bash
+./Git/lab02/tmp/hello
+./Git/lab02/tmp/Cat
+./Git/lab02/tmp/at
+./Git/lab02/tmp/2at
+./Git/lab02/tmp/list
+./Git/lab02/tmp/hat
+./Git/lab02/tmp/cat
+./Git/lab02/tmp/chat
+./Git/lab02/tmp/mat
+./Git/lab02/tmp/bat
+./Git/lab02/mySettings
+./Git/lab02/spellExample
+./Git/lab02/ids
+./Git/lab02/args.bash
+./Git/lab02/index2.html
+./Git/lab02/rv.bash
+./Git/lab02/Makefile
+./Git/lab02/isatty.bash
+./Git/lab02/list
+./Git/lab02/out.bash
+./Git/lab02/makefile
+./Git/lab02/outline.html
+./Git/lab02/descin
+./Git/lab02/varChange
+./Git/lab02/breadIsDangerous.txt
+./Git/lab02/index.html
+./Git/lab02/hello.bash
+./Git/lab02/eg.bash
+./Git/lab02/msg
+./Git/lab02/numbers
+./Git/lab02/func.bash
+./Git/lab02/hello.c
+./Git/lab02/getopts.bash
+./Git/lab02/fred
+
+Q2)
+find . -name "*.bash" -print
+
+Q3)
+97  499 2960 breadIsDangerous.txt
+
+Q4)
+31
+ls -1 | wc -l
+
+Q5)
+cat breadIsDangerous.txt | grep bread
+
+Q6
+cat breadIsDangerous.txt | grep the | wc -l
+
+Q7)
+spellExample.bak is now present.
+
+Q8)
+It prints which lines are different, the first line is in the first file, the dashes are a seperator, the next line is in the second file. The first number is the line number in the first file while the second is the line number in the second and the letter is the type of change.
+
+Q9)
+Nothing
+
+Q10)
+They are sorted by the first digit, then the second. They are being treated like strings.
+
+Q11)
+The -n flag causes the data to be treated as numbers.
+
+Q12)
+They are sorted in reverse.
+
+Q13)
+They are sorted by bytecount.
+
+Q14)
+du * | sort -k4 -h -r | head -8
+
+Q15)
+A return of 0 means it returned successfully and a nonzero means it was unsuccessful. The second one didn't find anything so it is considered unsuccessful even though it ran. 
+
+n.1)
+57194055a4101653052bd7d118f101ac78b46dbd
+
+n.2)
+git reset clears the index while git reset --hard clears the index and returns the working directory to the last committed state.
+
+n.3)
+git checkout dabc8d2 -- marlin

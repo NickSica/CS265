@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" content="no-expire">
+	<meta name="Author" content="Vera Zaychik & Kurt Schmidt">
+	<meta name="Publisher" content="Drexel University">
+	<meta name="Copyright" content="">
+	<meta name="Keywords" content="Programming Techniques Unix">
+	<meta name="Description"
+		content="Lab for CS265 - Adv. Programming Techniques">
+	<meta name="Pagetype" content="Lab">
+	<meta name="Audience" content="All">
+	<link rel='shortcut icon' type='image/gif'
+		href='http://www.cs.drexel.edu/~kschmidt/images/drexel.gif'></link>
+	<script language="JavaScript" src="../courseInfo.js"></script>
+	<script language="JavaScript" src="../Scripts/courseFormat.js"></script>
+	<title>Lab - Interfaces</title>
+</head>
+
+
+<body text="#330099" link="#000066" vlink="#000066" alink="#ff0000"
+	background='http://www.cs.drexel.edu/~kschmidt/images/blueTexture.jpeg'>
+
+<h1>Lab - Interfaces</h1>
+
+<p> Okay, just follow along, questions will be denoted with a
+<b><font size="=1">Q</font></b>. </p>
+
+<ul>
+	<li>Make some appropriate subdirectory for this lab and go there</li>
+	<li>Copy needed files from ~kschmidt/public_html/CS265/Labs/Interfaces/ to your lab
+		directory</li>
+</ul>
+
+<h2>Interfaces</h2>
+
+<p><b><font size="+1">Q 1</font></b> Describe what is meant by each of the
+following:</p>
+	<ol type='i'>
+		<li>Hide implementation details</li>
+		<li>Choose a small orthogonal set of primitives</li>
+		<li>Don't reach behind the user's back</li>
+		<li>Do the same thing the same way everywhere</li>
+	</ol>
+
+<h3>CSV implementation</h3>
+
+<p><b><font size="+1">Q 2</font></b> What are the problems w/the first
+implementation in C (<tt><b>Labs/Interfaces/csvgetline1.c</b></tt>)?</p>
+
+<p><b><font size="+1">Q 3</font></b> What things were improved upon in the first revision in C?</p>
+
+<p><b><font size="+1">Q 4</font></b> What problems does the first revision
+(<tt><b>Labs/Interfaces/csvgetline2.c</b></tt>) still have?  Can you parse 2 different CSV files at the same time?
+Explain.</p>
+
+<p><b><font size="+1">Q 5</font></b> Does the C++ implementation solve these problems?  What issues still remain?</p>
+
+<p><b><font size="+1">Q 6</font></b> Does the interface for the C++ implementation adhere to our guidelines for a good
+i/f, from lecture?</p>
+
+<p><b><font size="+1">Q 7</font></b> Re-write <a href='csvgetline2.c'><tt>csvgetline2.c</tt></a> so that you can parse
+more than one file.  You'll accomplish this by moving the globals associated with parsing a line into a struct (see
+<tt><b>csv.h</b></tt>.  To make it behave more like the C++ version, I added a <tt>FILE*</tt> field.  I also wrote
+<tt>stack_init</tt> and <tt>kill</tt> functions .  The <tt>main</tt> function is the same as previously, and resides in
+<tt><b>main.c</b></tt> .  I also provided a makefile. </p>
+
+<p> You should only need to edit <tt>csv.c</tt> .  Submit this file w/your labsheet. </p>
+
+<p> Find these files under the lab directory: </p>
+
+<ul>
+	<li> <a href='Structs/csv.h'><tt>Structs/csv.h</tt></a> </li>
+	<li> <a href='Structs/csv.c'><tt>Structs/csv.c</tt></a> </li>
+	<li> <a href='Structs/main.c'><tt>Structs/main.c</tt></a> </li>
+	<li> <a href='Structs/makefile'><tt>Structs/makefile</tt></a> </li>
+</ul>
+
+<p> By way of example I provided an implementation of a stack.  See <tt><b>Labs/interfaces/Stack</b></tt> .  You can have numerous independent stacks. </p>
+
+</body>
+</html>

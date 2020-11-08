@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Creates some test directories for use with the dir2xml assignment.  Randomly places sockets and pipes
+#
+# Kurt Schmidt
+# MAY 2019
+#
+# GNU bash, version 4.4.19(1)-release (x86_64-pc-linux-gnu), on
+# 4.15.0-48-generic #51-Ubuntu SMP Wed Apr 3 08:28:49 UTC 2019 GNU/Linux
+#
+
+TARG=${1:-.}
+TOP=Test_Dir
+
+if [ -e "$TARG/$TOP" ] ; then
+	read -p "target $TARG/$TOP already exists.  Overwrite? (y/[n]) => " resp
+	[[ ! "$resp" =~ [Yy] ]] && exit 3
+	\rm -rf "$TARG/$TOP"
+fi
+
+base64 -d <<EOS | tar -C"$TARG" -xzf -
+H4sIANKg4VwAA+2cXW/aMBSGuS2/AnFfiO3Y7qq01aR20qRNk7reTxCyNSqlWghT9+8XSoDGeM2w
+nEPavc9NypeM9HCOfY7d3CTz/Ntlmg07zREU6CBYXpmWleuaDhOhDgQLhWSdgHGtgk5PNvidNizm
++Sjr9Tp38/j2Pp3kf3tf3euvlJu1/3Q2SR4Ht/n91PsYS8Gq3r/SgnHJVeE/1FJ2eoH3b2IB/lf+
+P43G84aSwD/G/zP/QhVpAPFPQNX/9dX7y89XvseojX++E/+SC8Q/BU9p/3RayH/K/d1Dfx9ASzX+
+N78Dr2PsP//LsHgZ8U9A1b9oZAWw//wfFksAzP8UmP6/p9NEDEKvYzjEf6A54p8C0/9DfptkfvW7
++GcC6z8S7PHPvI7hEv9Kwz8Fpv8m2kD7+1fLp+CfANN/Ex2AWv/FZG+s/5QO4Z+CVf2/jfpulvxc
+pFkyOS1ngvLKy6soryE6BW8C+/zPvY7htP5H/ifB7l94HcPJP4N/Cqr+WXv6P9j/IcH035r6H/FP
+gtW/58Bz8o/+Hwmm/3bU/1JrBf8UmP4PUv8rS/2P/E/Cy/U/K+t/Vtb/bCBQ978pzPgvbXsdw6n/
+j/4fCXb/Ldj/wf4fCXb/h+//KJz/JaHqn7en/8PR/6HA9L+Mf96G/I/4J8H035r+H/o/JFj9t6H/
+h/UfCab/1vT/cP6LBNP/Qfp/Ev2/Q/Fy/4+X/T8+4Oj7vUnM+L8c5SPfRaBD/acU/v+DBKt/z5NA
+bf5n0pz/ZYj8T8Im3Y9PY6T4/w9r/N8tsnzw6K0EqIt/rnfO/wuN+o+E6KLw3PuVZPP0YXbWZ4Og
+30tm8cMknf0463/8+uX45ES+O2b9i/NuNCkyxSzPfp93j6J14ij+PoqWa8Tz8eqyeRyvH0fDZ2+O
+njoM23et5ppoWP3saPNENCw/EA23w3eRqjxhjf+x3zFc+r8M9T8JVv+x3zFc/HOc/yfB6n/kdwyn
++Mf5PxLs+38tOP8D/yRY93/8bv867f9wzP8kbPx/KAK/oRvAOfT/AoHzHyRs4z+J80XWyE/Awb+U
+Cv4p2PU/TWLP9wDbP/8roXD+g4Rd//53gGv979z/UYYC9R8J5f0f1zGPvhoAAAAAAAAAAAAAAAAA
+AAAAALxS/gDT2OE0AHgAAA==
+EOS
+
+find "$TOP" -mindepth 1 -type d | while read dir ; do
+	pushd "$dir" &>/dev/null
+
+	r=$RANDOM
+	if (( r%3 == 0 )) ; then
+		mkfifo aPipe
+	fi
+		
+	r=$RANDOM
+	if (( r%3 == 0 )) ; then
+		python -c "import socket as s; sock = s.socket(s.AF_UNIX); sock.bind('aSocket')"
+	fi
+	
+	popd &>/dev/null
+done

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+if (($# > 1)) ; then
+	echo "Too many arguments!"
+else
+	currDir=${1:-$PWD}
+fi
+
+for dir in $(find . -type d) ; do
+	dirFile=$dir"/dir.xml"
+	dirREADME=$dir"/README"
+	index=""
+	required=""
+	others=""
+	#Parse README
+	if [[ -e $dirREADME ]] ; then
+		read index required <<< $(awk -f parseREADME.awk $dirREADME)		
+	fi
+
+	for file in $(find $dir -maxdepth 1) ; do
+		if [[ *$file* != "$required $index" && $file != $dir ]] ; then
+			others+=${file##*/}" " 
+	   fi
+	done
+
+	#Build dir.xml using info
+	echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" > $dirFile
+	echo "<direntry>" >> $dirFile
+
+
+	echo "	<index>" >> $dirFile
+	for file in $index ; do
+		if [[ $file != -1 ]] ; then
+			if [[ -d $dir"/"$file ]] ; then
+				echo "		<dir>$file</dir>" >> $dirFile
+			else
+				echo "		<file>$file</file>" >> $dirFile
+			fi
+		fi
+	done
+	echo "	</index>" >> $dirFile
+			
+	echo "	<required>" >> $dirFile
+	for file in $required ; do
+		if [[ $file != -1 ]] ; then
+			if [[ -d $dir"/"$file ]] ; then
+				echo "		<dir>$file</dir>" >> $dirFile
+			else
+				echo "		<file>$file</file>" >> $dirFile
+			fi
+		fi
+	done
+	echo "	</required>" >> $dirFile
+	
+	echo "	<other>" >> $dirFile
+	for file in $others ; do
+		if [[ $file != "" ]] ; then
+			if [[ -d $dir"/"$file ]] ; then
+				echo "		<dir>$file</dir>" >> $dirFile
+			else
+				echo "		<file>$file</file>" >> $dirFile
+			fi
+		fi
+	done
+	echo "	</other>" >> $dirFile
+
+	echo "</direntry>" >> $dirFile
+done
+

@@ -1,0 +1,112 @@
+Q1)
+add calls addSuffix and deals with checking if the items are already in the table and moving further along the list while addSuffix just adds items to the table without those checks.
+
+Q2)
+lookup searches for the passed prefix and creates it if it is requested. It also returns a pointer if the passed prefix is created or present. add and generate call lookup
+
+Q3)
+Prefix     | Suffix List
+---------------------------
+(\n \n)    | It's
+(\n It's)  | a
+(It's a)   | new
+(a new)    | dawn
+(new dawn) | \n
+a) 2
+b) 2
+c) 2
+d) 1
+
+Q4)
+It's easy to replace values and memory efficient in a simple table that doesn't have too much depth to it.
+
+Q5)
+Cleaning up and adding can get really messy when it comes to a more convoluted and in-depth sentence/table.
+
+Q6)
+void clean()
+{
+	for(int i = 0; i < NHASH; i++)
+	{
+		if(!statetab[i])
+			continue;
+		
+		State *head = statetab[i];
+		State *curr;
+		State *nextPref = head;
+
+		while(nextPref != NULL)
+		{
+			curr = nextPref;
+			nextPref = curr->next;
+
+			for(int i = 0; i < NPREF; i++)
+			{
+				if(curr->pref[i])
+					free(curr->pref[i]);
+				curr->pref[i] = NULL;
+			}			
+
+			Suffix *currSuf;
+			Suffix *nextSuf = curr->suf;		
+			while(nextSuf != NULL)
+			{
+				currSuf = nextSuf;
+				nextSuf = currSuf->next;
+				
+				if(currSuf->word)
+					free(currSuf->word);
+				currSuf->word = NULL;
+				
+				if(currSuf->next)
+					free(currSuf->next);
+				currSuf->next = NULL;
+			}
+			
+			free(currSuf);
+			currSuf = NULL;
+			free(nextSuf);
+			nextSuf = NULL;
+		}
+		free(curr);
+		curr = NULL;
+		free(nextPref);
+		nextPref = NULL;
+	}
+}
+
+Q7)
+Yes, iterating down the linked lists and freeing everything without freeing something more than once or leaving any dangling pointers.
+
+Q8)
+Check to see if the pointer is pointing to anything before freeing the string so if it is pointing to a string, it'll free it and if it isn't it won't free an already free string. To check everything was freed correctly, you can make an exact copy of the data structure and print everything out. If everything was freed, it'll print all NULL's.
+
+Q9)
+In a deque, vectors aren't used because you can't push and pop from both sides in constant time like you can in a deque, which is needed when pushing new strings in the back and popping from the front.
+
+Q10)
+A map of deques(prefixes) and vectors(suffixes).
+
+Q11)
+A vector of strings.
+
+Q12)
+A lot of the underlying implementation is given to us in the STL and in some cases it could be easier to read, depending on the person.
+
+Q13)
+It is a lot slower than the C implementation.
+
+Q14)
+A tuple of strings is the prefix used as the key for the dictionary.
+
+Q15)
+A python dictionary.
+
+Q16)
+A tuple of strings is the key and it points to a list of strings.
+
+Q17)
+It's easier to read and faster than the C++ implementation.
+
+Q18)
+It isn't as memory efficient as using pointers in the C++ and C implementations.

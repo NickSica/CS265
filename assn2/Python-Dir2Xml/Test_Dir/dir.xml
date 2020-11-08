@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<direntry>
+	<index>
+	</index>
+	<required>
+	</required>
+	<other>
+		<dir>Labs</dir>
+		<dir>Files</dir>
+		<dir>Lectures</dir>
+		<file>dropXml.py</file>
+		<file>index.html</file>
+	</other>
+</direntry>

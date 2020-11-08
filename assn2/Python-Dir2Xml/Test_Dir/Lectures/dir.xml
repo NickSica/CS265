@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<direntry>
+	<index>
+		<file>lecs.html</file>
+	</index>
+	<required>
+	</required>
+	<other>
+		<file>lecs.html</file>
+		<file>README</file>
+	</other>
+</direntry>

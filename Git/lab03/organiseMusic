@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for file in *.mp3 ; do
+	mkdir -p "${file%% - *}"
+	mv "$file" "${file/' - '//}"
+done

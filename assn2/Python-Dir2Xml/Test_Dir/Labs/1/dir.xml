@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<direntry>
+	<index>
+		<file>index.html</file>
+	</index>
+	<required>
+		<file>file1.1</file>
+		<file>file1.2</file>
+		<file>file1.3</file>
+	</required>
+	<other>
+		<file>other4</file>
+		<file>file1.3</file>
+		<sock>aSocket</sock>
+		<file>other5</file>
+		<fifo>aPipe</fifo>
+		<file>index.html</file>
+		<file>README</file>
+	</other>
+</direntry>

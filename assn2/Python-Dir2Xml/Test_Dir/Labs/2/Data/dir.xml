@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<direntry>
+	<index>
+	</index>
+	<required>
+		<file>b</file>
+		<file>c</file>
+	</required>
+	<other>
+		<file>kurt.xml</file>
+		<sock>aSocket</sock>
+		<file>c</file>
+		<file>README</file>
+		<file>a</file>
+	</other>
+</direntry>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<direntry>
+	<index>
+	</index>
+	<required>
+	</required>
+	<other>
+		<dir>Labs</dir>
+		<dir>Files</dir>
+		<dir>Lectures</dir>
+		<file>parseREADME.awk</file>
+		<file>.a1-top.swp</file>
+		<file>a1-top</file>
+		<file>index.html</file>
+		<file>dir.xml</file>
+	</other>
+</direntry>
